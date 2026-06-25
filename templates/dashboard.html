@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Reminder</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            💊
+
+            <h2>MediMet</h2>
+
+        </div>
+
+        <nav>
+
+            <a class="active" href="/dashboard">🏠 Dashboard</a>
+
+            <a href="/add_medicine">💊 Add Medicine</a>
+
+            <a href="#">📅 Schedule</a>
+
+            <a href="#">📊 Reports</a>
+
+            <a href="/logout">🚪 Logout</a>
+
+        </nav>
+
+    </aside>
+
+    <!-- Main -->
+
+    <main class="main">
+
+        <header class="header">
+
+            <div>
+
+                <h1>Hello {{ name }} 👋</h1>
+
+                <p>Welcome back to your dashboard.</p>
+
+            </div>
+
+            <div class="header-icons">
+
+                🔔
+
+                👤
+
+            </div>
+
+        </header>
+
+        <!-- Stats -->
+
+        <section class="stats">
+
+            <div class="stat-card blue">
+
+                <h2>{{ total }}</h2>
+
+                <p>Total Medicines</p>
+
+            </div>
+
+            <div class="stat-card yellow">
+
+                <h2>{{ pending }}</h2>
+
+                <p>Pending</p>
+
+            </div>
+
+            <div class="stat-card green">
+
+                <h2>{{ taken }}</h2>
+
+                <p>Taken</p>
+
+            </div>
+
+        </section>
+
+        <div class="toolbar">
+
+            <a href="/add_medicine" class="add-btn">
+
+                + Add Medicine
+
+            </a>
+
+        </div>
+
+        <!-- Medicines -->
+
+        <div class="medicine-list">
+
+            {% for medicine in medicines %}
+
+            <div class="medicine-card">
+
+                <div>
+
+                    <h3>{{ medicine[2] }}</h3>
+
+                    <p>{{ medicine[3] }}</p>
+
+                </div>
+
+                <div>
+
+                    <strong>{{ medicine[4] }}</strong>
+
+                </div>
+
+                <div>
+
+                    {% if medicine[7]=="Taken" %}
+
+                    <span class="taken">
+
+                        Taken
+
+                    </span>
+
+                    {% else %}
+
+                    <span class="pending">
+
+                        Pending
+
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="actions">
+
+                    <a href="/edit/{{ medicine[0] }}">✏️</a>
+
+                    <a href="/delete/{{ medicine[0] }}">🗑️</a>
+
+                    {% if medicine[7]!="Taken" %}
+                    <a href="/taken/{{ medicine[0] }}">✔️</a>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+
+<script>
+
+let medicines=[
+
+{% for medicine in medicines %}
+
+{
+name:"{{medicine[2]}}",
+time:"{{medicine[4]}}"
+},
+
+{% endfor %}
+
+];
+
+function reminder(){
+
+let now=new Date();
+
+let hour=String(now.getHours()).padStart(2,'0');
+
+let minute=String(now.getMinutes()).padStart(2,'0');
+
+let current=hour+":"+minute;
+
+medicines.forEach(function(m){
+
+if(m.time.substring(0,5)==current){
+
+alert(" Time to take "+m.name);
+
+}
+
+});
+
+}
+
+setInterval(reminder,60000);
+
+</script>
+
+
+
+</html>
